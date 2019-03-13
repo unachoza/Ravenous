@@ -8,12 +8,35 @@ const sortByOptions = {
 }
 
 class SearchBar extends Component {
-    
+    constructor(props){
+        super(props)
+        this.state = {
+            'term': '',
+            'location': '',
+            'sortBy': 'best_match'
+        }
+        this.handleTermChange = this.handleTermChange.bind(this)
+        this.handleLocationChange = this.handleLocationChange.bind(this)
+    }
+    getSortedByClass = (sortByOption) =>{ 
+        return this.state.sortBy === sortByOption ? 'active' : ''
+    }
+    handleSortByChange = (sortByOption) => {
+        this.setState({'sortBy': sortByOption})
+    }
      renderSortByOptions(){
         return Object.keys(sortByOptions).map(sortByOption => {
             let sortByOptionValue = sortByOptions[sortByOption]
-            return <li key={sortByOptionValue}>{sortByOption}</li>
+            return <li className={this.getSortedByClass(sortByOptionValue)} key={sortByOptionValue} onClick={this.handleSortByChange.bind(this, sortByOptionValue)}>{sortByOption}</li>
         })
+    }
+
+    handleTermChange = (e) => {
+        this.setState({'term': e.target.value})
+    }
+
+    handleLocationChange = (e) => {
+        this.setState({'location': e.target.value})
     }
     render(){
         return(
@@ -24,8 +47,8 @@ class SearchBar extends Component {
                     </ul>
                 </div>
                 <div className="SearchBar-fields">
-                    <input placeholder="Search Businesses" />
-                    <input placeholder="Where?" />
+                    <input onChange={this.handleTermChange}placeholder="Search Businesses" />
+                    <input onChange={this.handleLocationChange}placeholder="Where?" />
                 </div>
                 <div className="SearchBar-submit">
                     <a>Let's Go</a>
